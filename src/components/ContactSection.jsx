@@ -34,7 +34,9 @@ const ContactSection = () => {
       whileInView={{ opacity: 1, y: 0 }}
       transition={{ duration: 1 }}
     >
-      <h1 className="text-3xl sm:text-4xl md:text-5xl lg:text-7xl font-bold mb-2 sm:mb-4">Contact</h1>
+      <h1 className="text-3xl sm:text-4xl md:text-5xl lg:text-7xl font-bold mb-2 sm:mb-4">
+        Contact
+      </h1>
       <p className="text-sm sm:text-lg text-gray-300 max-w-xs sm:max-w-md md:max-w-xl mb-4 sm:mb-8">
         Let's work together! You can reach me via email or connect with me on social platforms.
       </p>
@@ -47,21 +49,21 @@ const ContactSection = () => {
           type="text"
           name="from_name"
           placeholder="Your Name"
-          className="w-full px-3 sm:px-4 py-2 rounded-md bg-black/30 text-white border border-white/30 text-sm sm:text-base"
+          className="w-full px-3 sm:px-4 py-2 rounded-md bg-black/30 text-white border border-white/30 placeholder-gray-400 text-sm sm:text-base"
           required
         />
         <input
           type="email"
           name="reply_to"
           placeholder="Your Email"
-          className="w-full px-3 sm:px-4 py-2 rounded-md bg-black/30 text-white border border-white/30 text-sm sm:text-base"
+          className="w-full px-3 sm:px-4 py-2 rounded-md bg-black/30 text-white border border-white/30 placeholder-gray-400 text-sm sm:text-base"
           required
         />
         <textarea
           name="message"
           rows="4"
           placeholder="Your Message"
-          className="w-full px-3 sm:px-4 py-2 rounded-md bg-black/30 text-white border border-white/30 text-sm sm:text-base"
+          className="w-full px-3 sm:px-4 py-2 rounded-md bg-black/30 text-white border border-white/30 placeholder-gray-400 text-sm sm:text-base"
           required
         ></textarea>
         <button
