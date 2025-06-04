@@ -23,7 +23,7 @@ const FlipText = ({ text, className = "" }) => {
       {text.split("").map((char, i) => (
         <div
           key={i}
-          className="relative w-12 h-16 mx-[1px]"
+          className="relative w-10 h-14 sm:w-12 sm:h-16 mx-[1px]"
           style={{ perspective: 800 }}
         >
           <motion.div
@@ -33,13 +33,13 @@ const FlipText = ({ text, className = "" }) => {
             transition={{ duration: 0.6, delay: i * 0.05 }}
           >
             <span
-              className="absolute w-full h-full flex items-center justify-center text-white text-6xl md:text-8xl font-bold"
+              className="absolute w-full h-full flex items-center justify-center text-white text-5xl sm:text-6xl md:text-8xl font-bold"
               style={{ backfaceVisibility: "hidden" }}
             >
               {char}
             </span>
             <span
-              className="absolute w-full h-full flex items-center justify-center text-white text-6xl md:text-8xl font-bold"
+              className="absolute w-full h-full flex items-center justify-center text-white text-5xl sm:text-6xl md:text-8xl font-bold"
               style={{
                 transform: "rotateX(180deg)",
                 backfaceVisibility: "hidden",
@@ -56,6 +56,7 @@ const FlipText = ({ text, className = "" }) => {
 
 const Section = ({ title, subtitle, delay = 0, children }) => {
   const [hoveredButton, setHoveredButton] = useState(null);
+  const [mobileMenuOpen, setMobileMenuOpen] = useState(false);
 
   return (
     <motion.div
@@ -64,8 +65,8 @@ const Section = ({ title, subtitle, delay = 0, children }) => {
       animate={{ opacity: 1, y: 0 }}
       transition={{ duration: 1, delay }}
     >
-      {/* Left Buttons */}
-      <div className="absolute left-4 top-1/2 -translate-y-1/2 flex flex-col gap-6">
+      {/* Desktop Buttons - visible on sm and up */}
+      <div className="hidden sm:flex absolute left-4 top-1/2 -translate-y-1/2 flex-col gap-6">
         {buttonsData.map((btn) => (
           <div
             key={btn.id}
@@ -102,9 +103,42 @@ const Section = ({ title, subtitle, delay = 0, children }) => {
         ))}
       </div>
 
-      {/* Title with Flip Effect — sky/ on top, dev. below */}
+      {/* Mobile Button - visible only on small screens */}
+      <div className="sm:hidden absolute top-6 left-4 z-50">
+        <motion.div
+          className="w-12 h-12 bg-gray-700 rounded-md flex items-center justify-center cursor-pointer"
+          onClick={() => setMobileMenuOpen((prev) => !prev)}
+          whileTap={{ scale: 0.95 }}
+        >
+          <span className="text-xl">{mobileMenuOpen ? "×" : "≡"}</span>
+        </motion.div>
+
+        <AnimatePresence>
+          {mobileMenuOpen && (
+            <motion.div
+              initial={{ opacity: 0, y: -10 }}
+              animate={{ opacity: 1, y: 0 }}
+              exit={{ opacity: 0, y: -10 }}
+              transition={{ duration: 0.3 }}
+              className="mt-3 flex flex-col gap-2"
+            >
+              {buttonsData.map((btn) => (
+                <div
+                  key={btn.id}
+                  className="w-40 px-4 py-2 rounded shadow text-white text-sm"
+                  style={{ backgroundColor: btn.color }}
+                >
+                  {btn.text}
+                </div>
+              ))}
+            </motion.div>
+          )}
+        </AnimatePresence>
+      </div>
+
+      {/* Flip Title */}
       {title && (
-        <div className="mb-4 flex flex-col gap-2 items-center justify-center">
+        <div className="mb-4 flex flex-col gap-2 items-center justify-center mt-8 sm:mt-0">
           <FlipText text="sky/" />
           <FlipText text="dev." />
         </div>
@@ -112,7 +146,9 @@ const Section = ({ title, subtitle, delay = 0, children }) => {
 
       {/* Subtitle */}
       {subtitle && (
-        <p className="mt-6 text-lg text-gray-300 max-w-xl">{subtitle}</p>
+        <p className="mt-6 text-base sm:text-lg text-gray-300 max-w-xl px-2">
+          {subtitle}
+        </p>
       )}
 
       {/* Children */}

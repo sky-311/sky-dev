@@ -11,10 +11,10 @@ const ContactSection = () => {
 
     emailjs
       .sendForm(
-        "service_kg1f4wl",   // Replace with your EmailJS service ID
-        "template_lb0ainq",  // Replace with your EmailJS template ID
+        "service_kg1f4wl",
+        "template_lb0ainq",
         form.current,
-        "elhebDIxWYy3Iwcgp"    // Replace with your EmailJS public key
+        "elhebDIxWYy3Iwcgp"
       )
       .then(
         (result) => {
@@ -48,21 +48,21 @@ const ContactSection = () => {
           type="text"
           name="from_name"
           placeholder="Your Name"
-          className="w-full px-4 py-2 rounded-md bg-black/30 text-white border border-white/30"
+          className="w-full px-4 py-2 rounded-md bg-black/30 text-white border border-white/30 placeholder:text-white/70 placeholder:text-sm md:placeholder:text-base"
           required
         />
         <input
           type="email"
           name="reply_to"
           placeholder="Your Email"
-          className="w-full px-4 py-2 rounded-md bg-black/30 text-white border border-white/30"
+          className="w-full px-4 py-2 rounded-md bg-black/30 text-white border border-white/30 placeholder:text-white/70 placeholder:text-sm md:placeholder:text-base"
           required
         />
         <textarea
           name="message"
           rows="5"
           placeholder="Your Message"
-          className="w-full px-4 py-2 rounded-md bg-black/30 text-white border border-white/30"
+          className="w-full px-4 py-2 rounded-md bg-black/30 text-white border border-white/30 placeholder:text-white/70 placeholder:text-sm md:placeholder:text-base"
           required
         ></textarea>
         <button
