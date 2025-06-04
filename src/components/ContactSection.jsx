@@ -8,13 +8,12 @@ const ContactSection = () => {
 
   const sendEmail = (e) => {
     e.preventDefault();
-
     emailjs
       .sendForm(
-        "service_kg1f4wl",   // Replace with your EmailJS service ID
-        "template_lb0ainq",  // Replace with your EmailJS template ID
+        "service_kg1f4wl",
+        "template_lb0ainq",
         form.current,
-        "elhebDIxWYy3Iwcgp"    // Replace with your EmailJS public key
+        "elhebDIxWYy3Iwcgp"
       )
       .then(
         (result) => {
@@ -30,57 +29,57 @@ const ContactSection = () => {
 
   return (
     <motion.div
-      className="min-h-screen flex flex-col justify-center items-center text-white text-center px-6"
+      className="min-h-screen flex flex-col justify-center items-center text-white text-center px-4 sm:px-6"
       initial={{ opacity: 0, y: 50 }}
       whileInView={{ opacity: 1, y: 0 }}
       transition={{ duration: 1 }}
     >
-      <h1 className="text-5xl md:text-7xl font-bold mb-4">Contact</h1>
-      <p className="text-lg text-gray-300 max-w-xl mb-8">
+      <h1 className="text-3xl sm:text-4xl md:text-5xl lg:text-7xl font-bold mb-2 sm:mb-4">Contact</h1>
+      <p className="text-sm sm:text-lg text-gray-300 max-w-xs sm:max-w-md md:max-w-xl mb-4 sm:mb-8">
         Let's work together! You can reach me via email or connect with me on social platforms.
       </p>
       <form
         ref={form}
         onSubmit={sendEmail}
-        className="w-full max-w-xl bg-white/10 p-6 rounded-2xl border border-white/20 backdrop-blur shadow-lg space-y-4"
+        className="w-full max-w-xs sm:max-w-md md:max-w-xl bg-white/10 p-4 sm:p-6 rounded-2xl border border-white/20 backdrop-blur shadow-lg space-y-3 sm:space-y-4"
       >
         <input
           type="text"
           name="from_name"
           placeholder="Your Name"
-          className="w-full px-4 py-2 rounded-md bg-black/30 text-white border border-white/30"
+          className="w-full px-3 sm:px-4 py-2 rounded-md bg-black/30 text-white border border-white/30 text-sm sm:text-base"
           required
         />
         <input
           type="email"
           name="reply_to"
           placeholder="Your Email"
-          className="w-full px-4 py-2 rounded-md bg-black/30 text-white border border-white/30"
+          className="w-full px-3 sm:px-4 py-2 rounded-md bg-black/30 text-white border border-white/30 text-sm sm:text-base"
           required
         />
         <textarea
           name="message"
-          rows="5"
+          rows="4"
           placeholder="Your Message"
-          className="w-full px-4 py-2 rounded-md bg-black/30 text-white border border-white/30"
+          className="w-full px-3 sm:px-4 py-2 rounded-md bg-black/30 text-white border border-white/30 text-sm sm:text-base"
           required
         ></textarea>
         <button
           type="submit"
-          className="w-full py-3 bg-blue-600 hover:bg-blue-700 transition rounded-md font-semibold"
+          className="w-full px-4 py-2 bg-blue-600 hover:bg-blue-700 rounded-md text-white text-sm sm:text-base font-medium transition"
         >
           Send Message
         </button>
       </form>
-      <div className="flex gap-6 mt-8 text-3xl">
-        <a href="https://github.com/sky-311" target="_blank" rel="noopener noreferrer">
-          <FaGithub className="hover:text-blue-400 transition" />
+      <div className="flex gap-4 mt-6">
+        <a href="#" className="text-white hover:text-blue-400 transition">
+          <FaGithub size={24} />
         </a>
-        <a href="https://www.linkedin.com/in/skyp311/" target="_blank" rel="noopener noreferrer">
-          <FaLinkedin className="hover:text-blue-400 transition" />
+        <a href="#" className="text-white hover:text-blue-400 transition">
+          <FaLinkedin size={24} />
         </a>
-        <a href="mailto:skypolist11@gmail.com">
-          <FaEnvelope className="hover:text-blue-400 transition" />
+        <a href="#" className="text-white hover:text-blue-400 transition">
+          <FaEnvelope size={24} />
         </a>
       </div>
     </motion.div>

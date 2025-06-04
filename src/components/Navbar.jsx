@@ -2,29 +2,17 @@ import React, { useRef, useState } from "react";
 import { motion } from "framer-motion";
 
 const Navbar = ({ refs }) => {
-  const [position, setPosition] = useState({
-    left: 0,
-    width: 0,
-    opacity: 0,
-  });
+  const [position, setPosition] = useState({ left: 0, width: 0, opacity: 0 });
 
   const handleClick = (section) => {
     const ref = refs?.[section];
-    if (ref && ref.current) {
-      ref.current.scrollIntoView({ behavior: "smooth" });
-    }
+    if (ref && ref.current) ref.current.scrollIntoView({ behavior: "smooth" });
   };
 
   return (
-    <nav className="fixed top-0 left-0 z-50 w-full flex items-center justify-between px-6 py-2 bg-neutral-100 shadow-sm">
-      {/* Left: Tabs */}
+    <nav className="fixed top-0 left-0 z-50 w-full flex items-center justify-between px-4 sm:px-6 py-2 bg-neutral-100 shadow-sm">
       <ul
-        onMouseLeave={() => {
-          setPosition((pv) => ({
-            ...pv,
-            opacity: 0,
-          }));
-        }}
+        onMouseLeave={() => setPosition(pv => ({ ...pv, opacity: 0 }))}
         className="relative flex w-fit rounded-full border-2 border-black bg-white p-1"
       >
         <Tab setPosition={setPosition} onClick={() => window.scrollTo({ top: 0, behavior: "smooth" })}>
@@ -44,7 +32,9 @@ const Navbar = ({ refs }) => {
         </Tab>
         <Cursor position={position} />
       </ul>
-      <span className="ml-6 font-extrabold text-7xl text-black select-none">aakash</span>
+      <span className="ml-2 sm:ml-6 font-extrabold text-4xl sm:text-5xl md:text-7xl text-black select-none">
+        aakash
+      </span>
     </nav>
   );
 };
@@ -60,17 +50,11 @@ const Tab = ({ children, setPosition, onClick, showTooltip }) => {
       onMouseEnter={() => {
         if (!ref?.current) return;
         const { width } = ref.current.getBoundingClientRect();
-        setPosition({
-          left: ref.current.offsetLeft,
-          width,
-          opacity: 1,
-        });
+        setPosition({ left: ref.current.offsetLeft, width, opacity: 1 });
         if (showTooltip) setShow(true);
       }}
-      onMouseLeave={() => {
-        if (showTooltip) setShow(false);
-      }}
-      className="relative z-10 block cursor-pointer px-3 py-1 text-xs uppercase text-white mix-blend-difference md:px-5 md:py-2 md:text-base"
+      onMouseLeave={() => { if (showTooltip) setShow(false); }}
+      className="relative z-10 block cursor-pointer px-2 py-1 text-xs sm:px-3 sm:py-1 uppercase text-white mix-blend-difference md:px-5 md:py-2 md:text-base"
     >
       {children}
       {show && (
@@ -85,7 +69,7 @@ const Tab = ({ children, setPosition, onClick, showTooltip }) => {
 const Cursor = ({ position }) => (
   <motion.li
     animate={{ ...position }}
-    className="absolute z-0 h-7 rounded-full bg-black md:h-10"
+    className="absolute z-0 h-6 sm:h-7 rounded-full bg-black md:h-10"
     style={{ top: 0 }}
   />
 );
