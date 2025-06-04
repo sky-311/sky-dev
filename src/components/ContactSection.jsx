@@ -45,13 +45,13 @@ const ContactSection = () => {
         onSubmit={sendEmail}
         className="w-full max-w-xs sm:max-w-md md:max-w-xl bg-white/10 p-4 sm:p-6 rounded-2xl border border-white/20 backdrop-blur shadow-lg space-y-3 sm:space-y-4"
       >
-        <input
+        {/* <input
           type="text"
           name="from_name"
           placeholder="Your Name"
           className="w-full px-3 sm:px-4 py-2 rounded-md bg-black/30 text-white border border-white/30 placeholder-gray-400 text-sm sm:text-base"
           required
-        />
+        /> */}
         <input
           type="email"
           name="reply_to"
