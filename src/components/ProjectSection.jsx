@@ -1,4 +1,4 @@
-import { motion, useTransform, useScroll } from "framer-motion";
+import { motion, useScroll, animate, useMotionValue, useMotionValueEvent } from "framer-motion";
 import { useRef, useState } from "react";
 
 const cards = [
@@ -34,29 +34,83 @@ const cards = [
   }
 ];
 
+const left = `0%`;
+const right = `100%`;
+const leftInset = `20%`;
+const rightInset = `80%`;
+const transparent = `#0000`;
+const opaque = `#000`;
+
+function useScrollOverflowMask(scrollXProgress) {
+  const maskImage = useMotionValue(
+    `linear-gradient(90deg, ${opaque}, ${opaque} ${left}, ${opaque} ${rightInset}, ${transparent})`
+  );
+
+  useMotionValueEvent(scrollXProgress, "change", (value) => {
+    if (value === 0) {
+      animate(
+        maskImage,
+        `linear-gradient(90deg, ${opaque}, ${opaque} ${left}, ${opaque} ${rightInset}, ${transparent})`
+      );
+    } else if (value === 1) {
+      animate(
+        maskImage,
+        `linear-gradient(90deg, ${transparent}, ${opaque} ${leftInset}, ${opaque} ${right}, ${opaque})`
+      );
+    } else if (
+      scrollXProgress.getPrevious() === 0 ||
+      scrollXProgress.getPrevious() === 1
+    ) {
+      animate(
+        maskImage,
+        `linear-gradient(90deg, ${transparent}, ${opaque} ${leftInset}, ${opaque} ${rightInset}, ${transparent})`
+      );
+    }
+  });
+
+  return maskImage;
+}
+
 const ProjectSection = () => {
   return (
     <div className="relative">
       <div className="absolute inset-0 bg-gradient-to-br from-blue-900 to-black opacity-90 z-[-1]" />
       <HorizontalScrollCarousel />
+      <StyleSheet />
     </div>
   );
 };
 
 const HorizontalScrollCarousel = () => {
   const targetRef = useRef(null);
-  const { scrollYProgress } = useScroll({ target: targetRef });
-  const x = useTransform(scrollYProgress, [0, 1], ["1%", "-95%"]);
+  const { scrollXProgress } = useScroll({ container: targetRef });
+  const maskImage = useScrollOverflowMask(scrollXProgress);
 
   return (
-    <section ref={targetRef} className="relative h-[120vh]">
-      <div className="sticky top-0 flex h-screen items-center overflow-hidden">
-        <motion.div style={{ x }} className="flex gap-8 px-4">
-          {cards.map((card) => (
-            <Card key={card.id} card={card} />
-          ))}
-        </motion.div>
-      </div>
+    <section className="relative w-full max-w-[600px] mx-auto h-[600px]">
+      {/* Progress Indicator */}
+      <svg id="progress" width="80" height="80" viewBox="0 0 100 100" style={{ position: "absolute", top: -65, left: -15, transform: "rotate(-90deg)" }}>
+        <circle cx="50" cy="50" r="30" pathLength="1" className="bg" />
+        <motion.circle
+          cx="50"
+          cy="50"
+          r="30"
+          className="indicator"
+          style={{ pathLength: scrollXProgress }}
+        />
+      </svg>
+      {/* Scrollable Card List */}
+      <motion.ul
+        ref={targetRef}
+        style={{ maskImage, WebkitMaskImage: maskImage }}
+        className="flex list-none h-[520px] overflow-x-scroll py-5 gap-8 px-4"
+      >
+        {cards.map((card) => (
+          <li key={card.id} className="flex-shrink-0">
+            <Card card={card} />
+          </li>
+        ))}
+      </motion.ul>
     </section>
   );
 };
@@ -66,7 +120,7 @@ const Card = ({ card }) => {
 
   return (
     <motion.div
-      className="relative h-[450px] w-[450px] bg-neutral-200 rounded-xl overflow-hidden cursor-pointer"
+      className="relative h-[520px] w-[450px] bg-neutral-200 rounded-xl overflow-hidden cursor-pointer"
       onMouseEnter={() => setHovered(true)}
       onMouseLeave={() => setHovered(false)}
       whileHover={{ scale: 1.05 }}
@@ -98,7 +152,7 @@ const Card = ({ card }) => {
             top: "-10px",
             left: "-10px",
             width: "470px",
-            height: "470px",
+            height: "540px",
           }}
         >
           <div className="flex flex-col justify-end h-full">
@@ -119,5 +173,40 @@ const Card = ({ card }) => {
     </motion.div>
   );
 };
+
+// Inline styles for mask/progress indicator
+function StyleSheet() {
+  return (
+    <style>{`
+      #progress .bg {
+        stroke: #0b1011;
+        stroke-width: 10%;
+        fill: none;
+      }
+      #progress circle {
+        stroke-dashoffset: 0;
+        stroke-width: 10%;
+        fill: none;
+      }
+      #progress .indicator {
+        stroke: #38bdf8;
+        stroke-width: 10%;
+        fill: none;
+      }
+      ul::-webkit-scrollbar {
+        height: 5px;
+        background: #fff3;
+        border-radius: 1ex;
+      }
+      ul::-webkit-scrollbar-thumb {
+        background: #38bdf8;
+        border-radius: 1ex;
+      }
+      ul::-webkit-scrollbar-corner {
+        background: #fff3;
+      }
+    `}</style>
+  );
+}
 
 export default ProjectSection;
