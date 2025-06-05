@@ -25,6 +25,9 @@ const MobileSkills = () => {
   const containerRef = useRef(null);
   const throttleRef = useRef(false);
 
+  // For touch gesture
+  const touchStartY = useRef(null);
+
   useEffect(() => {
     const handleWheel = (e) => {
       if (!scrollLocked) return;
@@ -45,12 +48,60 @@ const MobileSkills = () => {
       }
     };
 
+    // --- Touch handlers for mobile ---
+    const handleTouchStart = (e) => {
+      if (!scrollLocked) return;
+      if (e.touches.length === 1) {
+        touchStartY.current = e.touches[0].clientY;
+      }
+    };
+
+    const handleTouchMove = (e) => {
+      if (!scrollLocked) return;
+      // Prevent page scroll while swiping cards
+      if (touchStartY.current !== null) e.preventDefault();
+    };
+
+    const handleTouchEnd = (e) => {
+      if (!scrollLocked) return;
+      if (touchStartY.current === null) return;
+      const touchEndY = e.changedTouches[0].clientY;
+      const deltaY = touchStartY.current - touchEndY;
+      touchStartY.current = null;
+
+      if (Math.abs(deltaY) < 40) return; // Ignore small swipes
+
+      if (throttleRef.current) return;
+      throttleRef.current = true;
+      setTimeout(() => {
+        throttleRef.current = false;
+      }, SCROLL_DELAY);
+
+      if (deltaY > 0 && activeIndex < skills.length - 1) {
+        // Swipe up
+        setActiveIndex((i) => Math.min(i + 1, skills.length - 1));
+      } else if (deltaY < 0 && activeIndex > 0) {
+        // Swipe down
+        setActiveIndex((i) => Math.max(i - 1, 0));
+      } else if (deltaY > 0 && activeIndex === skills.length - 1) {
+        setScrollLocked(false);
+      }
+    };
+
     const node = containerRef.current;
     if (node && scrollLocked) {
       node.addEventListener("wheel", handleWheel, { passive: false });
+      node.addEventListener("touchstart", handleTouchStart, { passive: false });
+      node.addEventListener("touchmove", handleTouchMove, { passive: false });
+      node.addEventListener("touchend", handleTouchEnd, { passive: false });
     }
     return () => {
-      if (node) node.removeEventListener("wheel", handleWheel);
+      if (node) {
+        node.removeEventListener("wheel", handleWheel);
+        node.removeEventListener("touchstart", handleTouchStart);
+        node.removeEventListener("touchmove", handleTouchMove);
+        node.removeEventListener("touchend", handleTouchEnd);
+      }
     };
   }, [activeIndex, scrollLocked]);
 
@@ -84,6 +135,7 @@ const MobileSkills = () => {
         overflow: scrollLocked ? "hidden" : "auto",
         position: "relative",
         zIndex: 10,
+        touchAction: "none", // Prevent default scroll on mobile
       }}
     >
       <div className="w-full h-full flex items-center justify-center">
