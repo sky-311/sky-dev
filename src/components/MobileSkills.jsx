@@ -58,7 +58,6 @@ const MobileSkills = () => {
 
     const handleTouchMove = (e) => {
       if (!scrollLocked) return;
-      // Prevent page scroll while swiping cards
       if (touchStartY.current !== null) e.preventDefault();
     };
 
@@ -120,9 +119,18 @@ const MobileSkills = () => {
     return () => window.removeEventListener("scroll", handleScroll);
   }, [scrollLocked]);
 
+  // When scroll lock is released, scroll the page past the card section
   useEffect(() => {
     if (!scrollLocked) {
-      window.scrollBy({ top: 10, behavior: "smooth" });
+      const container = containerRef.current;
+      if (container) {
+        const rect = container.getBoundingClientRect();
+        const scrollTop = window.pageYOffset || document.documentElement.scrollTop;
+        window.scrollTo({
+          top: scrollTop + rect.bottom,
+          behavior: "smooth",
+        });
+      }
     }
   }, [scrollLocked]);
 
