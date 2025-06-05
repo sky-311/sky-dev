@@ -56,7 +56,6 @@ const FlipText = ({ text, className = "" }) => {
 
 const Section = ({ title, subtitle, delay = 0, children }) => {
   const [hoveredButton, setHoveredButton] = useState(null);
-  const [mobileMenuOpen, setMobileMenuOpen] = useState(false);
 
   return (
     <motion.div
@@ -65,7 +64,7 @@ const Section = ({ title, subtitle, delay = 0, children }) => {
       animate={{ opacity: 1, y: 0 }}
       transition={{ duration: 1, delay }}
     >
-      {/* Desktop Buttons - visible on sm and up */}
+      {/* Desktop Buttons (Left side) */}
       <div className="hidden sm:flex absolute left-4 top-1/2 -translate-y-1/2 flex-col gap-6">
         {buttonsData.map((btn) => (
           <div
@@ -92,7 +91,8 @@ const Section = ({ title, subtitle, delay = 0, children }) => {
                   transition={{ type: "spring", stiffness: 300, damping: 20 }}
                   className="absolute left-16 top-1/2 -translate-y-1/2 w-52 p-4 bg-black text-white shadow-xl z-10"
                   style={{
-                    clipPath: "polygon(0 0, 90% 0, 100% 50%, 90% 100%, 0 100%)",
+                    clipPath:
+                      "polygon(0 0, 90% 0, 100% 50%, 90% 100%, 0 100%)",
                   }}
                 >
                   <div className="text-sm">{btn.text}</div>
@@ -103,40 +103,9 @@ const Section = ({ title, subtitle, delay = 0, children }) => {
         ))}
       </div>
 
-      {/* Mobile Button - visible only on small screens */}
-      <div className="sm:hidden absolute top-6 left-4 z-50">
-        <motion.div
-          className="w-12 h-12 bg-gray-700 rounded-md flex items-center justify-center cursor-pointer"
-          onClick={() => setMobileMenuOpen((prev) => !prev)}
-          whileTap={{ scale: 0.95 }}
-        >
-          <span className="text-xl">{mobileMenuOpen ? "×" : "≡"}</span>
-        </motion.div>
+      {/* Mobile: Buttons removed */}
 
-        <AnimatePresence>
-          {mobileMenuOpen && (
-            <motion.div
-              initial={{ opacity: 0, y: -10 }}
-              animate={{ opacity: 1, y: 0 }}
-              exit={{ opacity: 0, y: -10 }}
-              transition={{ duration: 0.3 }}
-              className="mt-3 flex flex-col gap-2"
-            >
-              {buttonsData.map((btn) => (
-                <div
-                  key={btn.id}
-                  className="w-40 px-4 py-2 rounded shadow text-white text-sm"
-                  style={{ backgroundColor: btn.color }}
-                >
-                  {btn.text}
-                </div>
-              ))}
-            </motion.div>
-          )}
-        </AnimatePresence>
-      </div>
-
-      {/* Flip Title */}
+      {/* Title */}
       {title && (
         <div className="mb-4 flex flex-col gap-2 items-center justify-center mt-8 sm:mt-0">
           <FlipText text="sky/" />
